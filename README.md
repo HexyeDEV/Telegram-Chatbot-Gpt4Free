@@ -8,8 +8,11 @@ Clone the repo
 After that go to the cloned repo directory.
 
 Edit the example.env file with:
+
 API_ID is your api id from https://my.telegram.org
+
 API_HASH is your api hash from https://my.telegram.org
+
 BOT_TOKEN is your bot token from Bot Father
 
 After that, renameexample.env into .env.
