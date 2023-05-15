@@ -18,16 +18,20 @@ async def start(event):
 
 @client.on(NewMessage())
 async def handler(e):
+    my_id = await client.get_me()
+    my_id = my_id.id
+    my_username = await client.get_me()
+    my_username = my_username.username
     if e.text.startswith('/'):
         return
-    if e.sender_id == client.get_me().id:
+    if e.sender_id == my_id:
         return
     if e.is_private:
         prompt = e.text
     else:
-        if not e.text.startswith(f'@{client.get_me().username}'):
+        if not e.text.startswith(f'@{my_username}'):
             return
-        prompt = e.text.replace(f'@{client.get_me().username}', '')
+        prompt = e.text.replace(f'@{my_username}', '')
     msg = await e.respond('Thinking...')
     full_text = ""
     for token in theb.Completion.create(prompt=prompt):
