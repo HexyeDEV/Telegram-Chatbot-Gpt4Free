@@ -46,7 +46,7 @@ async def start(event):
 
 @client.on(NewMessage(pattern='/help'))
 async def help(event):
-    await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.\nCommands:\n\n/jailbreak: Enable/Disable a jailbreak.')
+    await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.\nCommands:\n\n/jailbreak - list all jailbreaks\n\n/jailbreak [JAILBREAK NAME] - enable a jailbreak\n\n/plugins toggle - enable/disable plugins\n\n/plugins list - list all plugins')
 
 @client.on(NewMessage(pattern='/plugins list'))
 async def pls(event):
