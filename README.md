@@ -15,6 +15,8 @@ API_HASH is your api hash from https://my.telegram.org
 
 BOT_TOKEN is your bot token from Bot Father
 
+If you want to use WalframAlpha plugin, you will need to create an app at https://products.wolframalpha.com/api/ and set WOLFRAM_APP_ID in the example.env to the APP_ID of your Wolfram apllication.
+
 After that, rename example.env into .env.
 
 Now run main.py with ```python3 main.py```(may change based on your python version, settings and os.)
