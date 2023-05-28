@@ -25,13 +25,13 @@ Enjoy!
 
 Commands:
 
-[]/help - see a command list
+/help - see a command list
 
-[]/plugins toggle - enable/disable plugins
+/plugins toggle - enable/disable plugins
 
-[]/plugins list - list all plugins
+/plugins list - list all plugins
 
-[]/jailbreak - list all jailbreaks
+/jailbreak - list all jailbreaks
 
-[]/jailbreak [JAILBREAK NAME] - enable a jailbreak
+/jailbreak [JAILBREAK NAME] - enable a jailbreak
 
