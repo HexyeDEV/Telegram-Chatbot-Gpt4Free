@@ -35,3 +35,6 @@ Commands:
 
 /jailbreak [JAILBREAK NAME] - enable a jailbreak
 
+# Provider Used
+
+This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)
