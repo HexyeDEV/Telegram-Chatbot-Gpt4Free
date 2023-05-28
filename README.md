@@ -22,3 +22,16 @@ After that, rename example.env into .env.
 Now run main.py with ```python3 main.py```(may change based on your python version, settings and os.)
 
 Enjoy!
+
+Commands:
+
+/help - see a command list
+
+/plugins toggle - enable/disable plugins
+
+/plugins list - list all plugins
+
+/jailbreak - list all jailbreaks
+
+/jailbreak [JAILBREAK NAME] - enable a jailbreak
+
