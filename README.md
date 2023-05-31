@@ -19,6 +19,8 @@ If you want to use WalframAlpha plugin, you will need to create an app at https:
 
 After that, rename example.env into .env.
 
+Install all the packages running ```pip install -r requirements.txt```(may change based on your python version, settings and os.)
+
 Now run main.py with ```python3 main.py```(may change based on your python version, settings and os.)
 
 Enjoy!
@@ -35,3 +37,6 @@ Commands:
 
 /jailbreak [JAILBREAK NAME] - enable a jailbreak
 
+# Provider Used
+
+This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)
