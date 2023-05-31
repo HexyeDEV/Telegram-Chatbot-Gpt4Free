@@ -117,6 +117,7 @@ async def handler(e):
             result = await AiAgent(plugins_second_question["wolframalpha"].replace("<input>", prompt).replace("<result>", result))
             await msg.edit(result)
             return
+        await msg.edit(result)
     else:
         result = await AiAgent(prompt, system_prompt)
         await msg.edit(result)
