@@ -37,6 +37,14 @@ Commands:
 
 /jailbreak [JAILBREAK NAME] - enable a jailbreak
 
+/newrole <Role Name> <Role Info> - create a new role
+
+/roles - list all the roles
+
+/role <Role Name> - enable a role
+
+/role disable - disable roles
+
 # Provider Used
 
 This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)

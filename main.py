@@ -3,6 +3,7 @@ from telethon.events import NewMessage
 from dotenv import load_dotenv
 from os import getenv
 from evagpt4 import Model
+import json
 import wolframalpha
 load_dotenv()
 
@@ -18,6 +19,7 @@ client = TelegramClient('bot', api_id, api_hash)
 
 DAN_JAILBREAK = False
 PLUGINS = False
+ROLE = ""
 plugins_dict = {
     "wolframalpha": "Wolframalpha plugin lets you perform math operations. If appropriate to use it, answer exactly with: \"[WOLFRAMALPHA <query> END]\" where query is the operation you need to solve. Examples: Input: Solve for x: 2x+3=5 Output: [WOLFRAMALPHA solve (2x+3=5) for x END] Input: A*2=B solve for B Output: [WOLFRAMALPHA solve (A*2=B) for B END]. Even if you got the input in a different language, always use english in the wolframalpha query.",
 }
@@ -45,7 +47,7 @@ async def start(event):
 
 @client.on(NewMessage(pattern='/help'))
 async def help(event):
-    await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.\nCommands:\n\n/jailbreak - list all jailbreaks\n\n/jailbreak [JAILBREAK NAME] - enable a jailbreak\n\n/plugins toggle - enable/disable plugins\n\n/plugins list - list all plugins')
+    await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.\nCommands:\n\n/jailbreak - list all jailbreaks\n\n/jailbreak [JAILBREAK NAME] - enable a jailbreak\n\n/plugins toggle - enable/disable plugins\n\n/plugins list - list all plugins\n\n/newrole <Role Name> <Role Info> - add a new role\n\n/roles - list all roles\n\n/role <Role Name> enable a role\n\n/role disable - disable roles')
 
 @client.on(NewMessage(pattern='/plugins list'))
 async def pls(event):
@@ -78,9 +80,55 @@ async def jailbreak(event):
     except IndexError:
         await event.respond('TO enable a jailbreak you have to specify one. Available jailbreaks are:\n\nDAN\ndisable')
 
+@client.on(NewMessage(pattern="/newrole"))
+async def newrole(event):
+    with open("roles.json", "r") as f:
+        roles = f.read()
+    roles = json.loads(roles)
+    try:
+        role_name = event.text.split(" ")[1]
+        role = event.text.split(" ", 2)[2]
+    except IndexError:
+        await event.respond("You need to specify a role name and a role.")
+        return
+    roles[role_name] = role
+    with open("roles.json", "w") as f:
+        f.write(json.dumps(roles))
+    await event.respond("Role added")
+
+@client.on(NewMessage(pattern="/roles"))
+async def roles(event):
+    with open("roles.json", "r") as f:
+        roles = f.read()
+    roles = json.loads(roles)
+    await event.respond("Available roles:\n{}".format("\n".join(roles.keys())))
+
+@client.on(NewMessage(pattern="/role"))
+async def role(event):
+    global ROLE
+    try:
+        loc_role = event.text.split(" ")[1]
+    except IndexError:
+        await event.respond("You need to specify a role.")
+        return
+    if loc_role == "disable":
+        ROLE = ""
+        await event.respond("Role disabled")
+        return
+    with open("roles.json", "r") as f:
+        roles = f.read()
+    roles = json.loads(roles)
+    try:
+        ROLE = roles[loc_role]
+        await event.respond("Role set")
+    except KeyError:
+        await event.respond("Role not found")
+
+
+
 @client.on(NewMessage())
 async def handler(e):
-    global DAN_JAILBREAK, PLUGINS, wolframalpha_app_id, client, plugins_string, plugins_second_question, DAN_PROMPT, PLUGIN_PROMPT
+    global DAN_JAILBREAK, PLUGINS, wolframalpha_app_id, client, plugins_string, plugins_second_question, DAN_PROMPT, PLUGIN_PROMPT, ROLE
     my_id = await client.get_me()
     my_id = my_id.id
     my_username = await client.get_me()
@@ -104,6 +152,9 @@ async def handler(e):
         system_prompt = DAN_PROMPT
     if PLUGINS == True:
         system_prompt = PLUGIN_PROMPT
+    if ROLE != "":
+        system_prompt = ROLE
+        PLUGINS = False
     if PLUGINS:
         result = await AiAgent(prompt, system_prompt)
         if "[WOLFRAMALPHA" in result:
