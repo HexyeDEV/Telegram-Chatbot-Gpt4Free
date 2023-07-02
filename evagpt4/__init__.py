@@ -37,7 +37,6 @@ class Model:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(self.url, headers=self.headers, data=json.dumps(self.payload)) as response:
-                print(response.text)
                 async for line in response.content:
                     await self._process_line(line)
 

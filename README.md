@@ -45,6 +45,10 @@ Commands:
 
 /role disable - disable roles
 
+/memory - enable/disable memory
+
+/addmemory - add something to the memory without receiving AI response.
+
 # Provider Used
 
 This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)
