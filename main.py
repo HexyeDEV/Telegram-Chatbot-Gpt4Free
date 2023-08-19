@@ -3,7 +3,7 @@ from telethon.events import NewMessage
 from dotenv import load_dotenv
 from os import getenv
 from evagpt4 import Model
-import json
+from role import Role
 import wolframalpha
 from memory import Memory
 from uuid import uuid4
@@ -93,21 +93,17 @@ async def newrole(event):
     roles = json.loads(roles)
     try:
         role_name = event.text.split(" ")[1]
-        role = event.text.split(" ", 2)[2]
+        role_info = event.text.split(" ", 2)[2]
     except IndexError:
         await event.respond("You need to specify a role name and a role.")
         return
-    roles[role_name] = role
-    with open("roles.json", "w") as f:
-        f.write(json.dumps(roles))
+    roles[role_name] = Role(role_name, role_info)
     await event.respond("Role added")
 
 @client.on(NewMessage(pattern="/roles"))
 async def roles(event):
-    with open("roles.json", "r") as f:
-        roles = f.read()
-    roles = json.loads(roles)
-    await event.respond("Available roles:\n{}".format("\n".join(roles.keys())))
+    role_names = [role.get_name() for role in roles.values()]
+    await event.respond("Available roles:\n{}".format("\n".join(role_names)))
 
 @client.on(NewMessage(pattern="/role"))
 async def role(event):
@@ -121,9 +117,6 @@ async def role(event):
         ROLE = ""
         await event.respond("Role disabled")
         return
-    with open("roles.json", "r") as f:
-        roles = f.read()
-    roles = json.loads(roles)
     try:
         ROLE = roles[loc_role]
         await event.respond("Role set")
