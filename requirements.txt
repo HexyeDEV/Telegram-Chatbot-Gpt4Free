@@ -3,5 +3,5 @@ fake_useragent==1.1.3
 python-dotenv==1.0.0
 Telethon==1.26.1
 wolframalpha==5.0
-chromadb==0.3.26
+chromadb==0.3.28
 pydantic==1.8.2
