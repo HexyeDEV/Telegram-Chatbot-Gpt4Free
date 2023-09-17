@@ -6,3 +6,5 @@ wolframalpha==5.0
 chromadb==0.3.26
 aiohttp==3.8.4
 browser_cookie3==0.19.1
+pandas==1.2.3
+pyarrow==4.0.0
