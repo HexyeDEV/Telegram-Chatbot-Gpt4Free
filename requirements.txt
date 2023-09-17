@@ -4,3 +4,5 @@ python-dotenv==1.0.0
 Telethon==1.26.1
 wolframalpha==5.0
 chromadb==0.3.26
+pandas==1.2.3
+pyarrow==4.0.0
