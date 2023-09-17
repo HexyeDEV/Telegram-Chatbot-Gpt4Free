@@ -51,4 +51,4 @@ Commands:
 
 # Provider Used
 
-This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)
+This project is currently using reverse engineered bing from [GPT4FREE](https://github.com/xtekky/gpt4free)
