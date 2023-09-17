@@ -52,3 +52,10 @@ Commands:
 # Provider Used
 
 This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)
+
+# Running the Application in a Docker Container
+
+1. Build the Docker image using the command `docker build -t telegram-chatbot .`
+2. Run the Docker container using the command `docker run -p 80:80 telegram-chatbot`
+3. Alternatively, use Docker Compose to build and run the Docker container using the command `docker-compose up`
+This project is currently using evagpt4 from [OpenGPT](https://github.com/uesleibros/OpenGPT)
