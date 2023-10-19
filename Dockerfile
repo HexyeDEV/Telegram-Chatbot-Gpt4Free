@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y python-hnswlib
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Removed duplicate pip install command
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
