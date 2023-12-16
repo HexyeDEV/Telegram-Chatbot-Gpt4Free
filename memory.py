@@ -1,17 +1,16 @@
 import chromadb
+from chromadb.db.base import UniqueConstraintError
 
 
 class Memory:
     def __init__(self, name):
         self.name = name
+        self.client = chromadb.PersistentClient(
+            path="./persist"
+        )
         try:
-            self.client = chromadb.Client(
-                chromadb.Settings(
-                    chroma_db_impl="duckdb+parquet", persist_directory="./persist"
-                )
-            )
             self.collection = self.client.create_collection(name)
-        except ValueError:
+        except UniqueConstraintError:
             self.collection = self.client.get_collection(name)
         except Exception as e:
             print(f"Error initializing Memory class: {e}")
