@@ -47,6 +47,9 @@ async def AiAgent(prompt, system_prompt=""):
 
 @client.on(NewMessage(pattern='/start'))
 async def start(event):
+CURRENT_JAILBREAK_MODE = None
+with open('jailbreak_modes.json', 'r') as f:
+    JAILBREAK_MODES = json.load(f)
     await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.')
 
 @client.on(NewMessage(pattern='/help'))
@@ -74,13 +77,14 @@ async def pls_toggle(event):
 async def jailbreak(event):
     try:
         jailbreak = event.text.split(' ')[1]
-        if jailbreak == 'DAN':
-            global DAN_JAILBREAK
-            DAN_JAILBREAK = True
-            await event.respond('DAN Mode enabled')
-        elif jailbreak == 'disable':
-            DAN_JAILBREAK = False
-            await event.respond('DAN Mode disabled')
+        jailbreak_mode = event.text.split(' ')[1]
+        if jailbreak_mode in JAILBREAK_MODES:
+            global CURRENT_JAILBREAK_MODE
+            CURRENT_JAILBREAK_MODE = jailbreak_mode
+            await event.respond(f'{jailbreak_mode} Mode enabled')
+        elif jailbreak_mode == 'disable':
+            CURRENT_JAILBREAK_MODE = None
+            await event.respond('Jailbreak Mode disabled')
     except IndexError:
         await event.respond('TO enable a jailbreak you have to specify one. Available jailbreaks are:\n\nDAN\ndisable')
 
@@ -162,20 +166,12 @@ async def handler(e):
         prompt = e.text.replace(f'@{my_username}', '')
     msg = await e.respond('Thinking...')
     system_prompt = ""
-    if DAN_JAILBREAK == True and PLUGINS == True:
-        await msg.edit('You can\'t use both DAN and plugins at the same time.')
-        return
-    if PLUGINS == True and MEMORY == True:
-        await msg.edit('You can\'t use both plugins and memory at the same time.')
-        return
-    if DAN_JAILBREAK == True and ROLE != "":
-        await msg.edit('You can\'t use both DAN and roles at the same time.')
-        return
-    if PLUGINS == True and ROLE != "":
-        await msg.edit('You can\'t use both plugins and roles at the same time.')
-        return
-    if DAN_JAILBREAK == True:
-        system_prompt = DAN_PROMPT
+    if CURRENT_JAILBREAK_MODE:
+        jailbreak_config = JAILBREAK_MODES.get(CURRENT_JAILBREAK_MODE, {})
+        system_prompt = jailbreak_config.get('prompt', '')
+        if 'response_format' in jailbreak_config and jailbreak_config['response_format'] == 'code_block':
+            # Modify response generation for code block format
+            pass  # Placeholder for further customization
     if PLUGINS == True:
         system_prompt = PLUGIN_PROMPT
     if ROLE != "":
