@@ -1,4 +1,5 @@
 from telethon import TelegramClient
+from jailbreak_modes import JailbreakMode
 from telethon.events import NewMessage
 from dotenv import load_dotenv
 from os import getenv
@@ -105,6 +106,19 @@ async def roles(event):
     with open("roles.json", "r") as f:
         roles = f.read()
     roles = json.loads(roles)
+global DAN_JAILBREAK, balakula_mode, basedgpt_mode, dac_mode
+        elif jailbreak == 'balakula':
+            balakula_mode = True
+            DAN_JAILBREAK = basedgpt_mode = dac_mode = False
+            await event.respond('Balakula mode enabled')
+        elif jailbreak == 'basedgpt':
+            basedgpt_mode = True
+            DAN_JAILBREAK = balakula_mode = dac_mode = False
+            await event.respond('BasedGPT mode enabled')
+        elif jailbreak == 'dac':
+            dac_mode = True
+            DAN_JAILBREAK = balakula_mode = basedgpt_mode = False
+            await event.respond('DAC mode enabled')
     await event.respond("Available roles:\n{}".format("\n".join(roles.keys())))
 
 @client.on(NewMessage(pattern="/role"))
@@ -199,6 +213,12 @@ async def handler(e):
             else:
                 result = next(res.results).text
             result = await AiAgent(plugins_second_question["wolframalpha"].replace("<input>", prompt).replace("<result>", result))
+    elif balakula_mode == True:
+        system_prompt = JailbreakMode.balakula_mode(prompt)
+    elif basedgpt_mode == True:
+        system_prompt = JailbreakMode.basedgpt_mode(prompt)
+    elif dac_mode == True:
+        system_prompt = JailbreakMode.dac_mode(prompt)
             if MEMORY == True:
                 memory.insert(prompt, str(uuid4()))
                 memory.insert(result, str(uuid4()))
