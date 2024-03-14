@@ -74,13 +74,31 @@ async def pls_toggle(event):
 async def jailbreak(event):
     try:
         jailbreak = event.text.split(' ')[1]
-        if jailbreak == 'DAN':
-            global DAN_JAILBREAK
-            DAN_JAILBREAK = True
+        global CURRENT_MODE
+        if jailbreak == 'ZORG':
+            CURRENT_MODE = 'ZORG'
+            await event.respond('ZORG👽 Mode enabled')
+        elif jailbreak == 'AVA':
+            CURRENT_MODE = 'AVA'
+            await event.respond('AVA Mode enabled')
+        elif jailbreak == 'Balakula':
+            CURRENT_MODE = 'Balakula'
+            await event.respond('Balakula Mode enabled')
+        elif jailbreak == 'BasedGPT':
+            CURRENT_MODE = 'BasedGPT'
+            await event.respond('BasedGPT Mode enabled')
+        elif jailbreak == 'DAN':
+            CURRENT_MODE = 'DAN'
             await event.respond('DAN Mode enabled')
+        elif jailbreak == 'DAC':
+            CURRENT_MODE = 'DAC'
+            await event.respond('DAC Mode enabled')
+        elif jailbreak == 'Vzex-G':
+            CURRENT_MODE = 'Vzex-G'
+            await event.respond('Vzex-G Mode enabled')
         elif jailbreak == 'disable':
-            DAN_JAILBREAK = False
-            await event.respond('DAN Mode disabled')
+            CURRENT_MODE = ''
+            await event.respond('Jailbreak mode disabled')
     except IndexError:
         await event.respond('TO enable a jailbreak you have to specify one. Available jailbreaks are:\n\nDAN\ndisable')
 
