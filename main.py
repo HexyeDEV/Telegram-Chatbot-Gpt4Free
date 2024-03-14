@@ -1,4 +1,5 @@
 from telethon import TelegramClient
+from jailbreak_handlers import handle_balakula_jailbreak, handle_basedgpt_jailbreak, handle_dac_jailbreak
 from telethon.events import NewMessage
 from dotenv import load_dotenv
 from os import getenv
@@ -105,6 +106,18 @@ async def roles(event):
     with open("roles.json", "r") as f:
         roles = f.read()
     roles = json.loads(roles)
+        elif jailbreak == 'Balakula':
+            global BALAKULA_JAILBREAK
+            BALAKULA_JAILBREAK = True
+            await event.respond('Balakula Mode enabled')
+        elif jailbreak == 'BasedGPT':
+            global BASEDGPT_JAILBREAK
+            BASEDGPT_JAILBREAK = True
+            await event.respond('BasedGPT Mode enabled')
+        elif jailbreak == 'DAC':
+            global DAC_JAILBREAK
+            DAC_JAILBREAK = True
+            await event.respond('DAC Mode enabled')
     await event.respond("Available roles:\n{}".format("\n".join(roles.keys())))
 
 @client.on(NewMessage(pattern="/role"))
@@ -183,6 +196,19 @@ async def handler(e):
         PLUGINS = False
     if MEMORY == True:
         res = memory.find(prompt)
+    global BALAKULA_JAILBREAK, BASEDGPT_JAILBREAK, DAC_JAILBREAK
+    if BALAKULA_JAILBREAK:
+        response = await handle_balakula_jailbreak(prompt)
+        await msg.edit(response)
+        return
+    elif BASEDGPT_JAILBREAK:
+        response = await handle_basedgpt_jailbreak(prompt)
+        await msg.edit(response)
+        return
+    elif DAC_JAILBREAK:
+        response = await handle_dac_jailbreak(prompt)
+        await msg.edit(response)
+        return
         if len(res) > 0 or res[0] != []:
             system_prompt = system_prompt + "To answer the next question these data may be relevant: "
             for i in res:
