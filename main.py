@@ -175,7 +175,11 @@ async def handler(e):
     if PLUGINS == True and ROLE != "":
         await msg.edit('You can\'t use both plugins and roles at the same time.')
         return
-    if DAN_JAILBREAK == True:
+    # Debugging DAN_JAILBREAK status
+    print(f"DAN_JAILBREAK status before AiAgent call: {DAN_JAILBREAK}")
+    if DAN_JAILBREAK:
+        system_prompt = DAN_PROMPT
+        print(f"System prompt set for DAN Mode: {system_prompt}")
         system_prompt = DAN_PROMPT
     if PLUGINS == True:
         system_prompt = PLUGIN_PROMPT
@@ -197,6 +201,17 @@ async def handler(e):
                     system_prompt = system_prompt + i[0]
     if PLUGINS:
         result = await AiAgent(prompt, system_prompt)
+        if "[WOLFRAMALPHA" in result:
+            query = result.replace(f"[WOLFRAMALPHA ", "").replace(" END]", "")
+            wf_client = wolframalpha.Client(app_id=wolframalpha_app_id)
+    elif PLUGINS:
+        print(f"Calling AiAgent with plugin prompt: {system_prompt}")
+        result = await AiAgent(prompt, system_prompt)
+        print(f"Result from AiAgent with plugin: {result}")
+    else:
+        print(f"Calling AiAgent with default prompt: {system_prompt}")
+        result = await AiAgent(prompt, system_prompt)
+        print(f"Default result from AiAgent: {result}")
         if "[WOLFRAMALPHA" in result:
             query = result.replace(f"[WOLFRAMALPHA ", "").replace(" END]", "")
             wf_client = wolframalpha.Client(app_id=wolframalpha_app_id)
