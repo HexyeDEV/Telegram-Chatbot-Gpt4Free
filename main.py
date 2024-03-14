@@ -75,11 +75,12 @@ async def jailbreak(event):
     try:
         jailbreak = event.text.split(' ')[1]
         if jailbreak == 'DAN':
-            global DAN_JAILBREAK
-            DAN_JAILBREAK = True
+            with open("jailbreak_status.json", "w") as f:
+                f.write(json.dumps({"DAN_JAILBREAK": True}))
             await event.respond('DAN Mode enabled')
         elif jailbreak == 'disable':
-            DAN_JAILBREAK = False
+            with open("jailbreak_status.json", "w") as f:
+                f.write(json.dumps({"DAN_JAILBREAK": False}))
             await event.respond('DAN Mode disabled')
     except IndexError:
         await event.respond('TO enable a jailbreak you have to specify one. Available jailbreaks are:\n\nDAN\ndisable')
@@ -183,6 +184,12 @@ async def handler(e):
         PLUGINS = False
     if MEMORY == True:
         res = memory.find(prompt)
+    try:
+        with open("jailbreak_status.json", "r") as f:
+            jailbreak_status = json.load(f)
+        DAN_JAILBREAK = jailbreak_status.get("DAN_JAILBREAK", False)
+    except FileNotFoundError:
+        DAN_JAILBREAK = False
         if len(res) > 0 or res[0] != []:
             system_prompt = system_prompt + "To answer the next question these data may be relevant: "
             for i in res:
