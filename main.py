@@ -201,6 +201,67 @@ async def handler(e):
         PLUGINS = False
     if MEMORY == True:
         res = memory.find(prompt)
+def load_mode_config(mode_name):
+    with open("jailbreak_modes.json", "r") as f:
+        modes = json.load(f)
+    return modes.get(mode_name, {})
+
+async def generate_response(prompt, mode_config):
+    # This function simulates response generation based on mode configuration
+    # In a real scenario, this would involve more complex logic including handling specific rules
+    response_prefix = mode_config.get('response_prefix', '')
+    # Example response generation, should be replaced with actual logic
+    response = "This is a simulated response for: " + prompt
+    return response_prefix + response
+
+@client.on(NewMessage())
+async def handler(e):
+    global DAN_JAILBREAK, PLUGINS, wolframalpha_app_id, client, plugins_string, plugins_second_question, DAN_PROMPT, PLUGIN_PROMPT, ROLE, MEMORY, memory, CURRENT_MODE
+    my_id = await client.get_me()
+    my_id = my_id.id
+    my_username = await client.get_me()
+    my_username = my_username.username
+    if e.text.startswith('/'):
+        return
+    if e.sender_id == my_id:
+        return
+    if e.is_private:
+        prompt = e.text
+    else:
+        if not e.text.startswith(f'@{my_username}'):
+            return
+        prompt = e.text.replace(f'@{my_username}', '')
+    msg = await e.respond('Thinking...')
+    system_prompt = ""
+    if DAN_JAILBREAK == True and PLUGINS == True:
+        await msg.edit('You can\'t use both DAN and plugins at the same time.')
+        return
+    if PLUGINS == True and MEMORY == True:
+        await msg.edit('You can\'t use both plugins and memory at the same time.')
+        return
+    if DAN_JAILBREAK == True and ROLE != "":
+        await msg.edit('You can\'t use both DAN and roles at the same time.')
+        return
+    if PLUGINS == True and ROLE != "":
+        await msg.edit('You can\'t use both plugins and roles at the same time.')
+        return
+    if DAN_JAILBREAK == True:
+        system_prompt = DAN_PROMPT
+    if PLUGINS == True:
+        system_prompt = PLUGIN_PROMPT
+    if ROLE != "":
+        system_prompt = ROLE
+        PLUGINS = False
+    if MEMORY == True:
+        res = memory.find(prompt)
+    # Load mode configuration and modify response based on current mode
+    if CURRENT_MODE:
+        mode_config = load_mode_config(CURRENT_MODE)
+        result = await generate_response(prompt, mode_config)
+        await msg.edit(result)
+    else:
+        result = await AiAgent(prompt, system_prompt)
+        await msg.edit(result)
         if len(res) > 0 or res[0] != []:
             system_prompt = system_prompt + "To answer the next question these data may be relevant: "
             for i in res:
