@@ -47,6 +47,7 @@ async def AiAgent(prompt, system_prompt=""):
 
 @client.on(NewMessage(pattern='/start'))
 async def start(event):
+ZORG_JAILBREAK = False
     await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.')
 
 @client.on(NewMessage(pattern='/help'))
@@ -78,11 +79,15 @@ async def jailbreak(event):
             global DAN_JAILBREAK
             DAN_JAILBREAK = True
             await event.respond('DAN Mode enabled')
+        elif jailbreak == 'ZORG':
+            global ZORG_JAILBREAK
+            ZORG_JAILBREAK = True
+            await event.respond('ZORG👽 mode activated. I\'m ready to unleash knowledge without limits.')
         elif jailbreak == 'disable':
             DAN_JAILBREAK = False
             await event.respond('DAN Mode disabled')
     except IndexError:
-        await event.respond('TO enable a jailbreak you have to specify one. Available jailbreaks are:\n\nDAN\ndisable')
+        await event.respond('To enable a jailbreak you have to specify one. Available jailbreaks are:\n\nDAN\nZORG\ndisable')
 
 @client.on(NewMessage(pattern="/newrole"))
 async def newrole(event):
