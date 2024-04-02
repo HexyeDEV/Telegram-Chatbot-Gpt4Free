@@ -49,7 +49,7 @@ async def AiAgent(prompt, system_prompt="", zorg_mode=False):
 
 @client.on(NewMessage(pattern='/start'))
 async def start(event):
-ZORG_JAILBREAK = False
+    ZORG_JAILBREAK = False
     await event.respond('Hey! Write something and I will answer you using the gpt-4 model or add me to a group and I will answer you when you mention me.')
 
 @client.on(NewMessage(pattern='/help'))
