@@ -51,7 +51,7 @@ Commands:
 
 # Provider Used
 
-This project is currently using reverse engineered bing from [GPT4FREE](https://github.com/xtekky/gpt4free)
+This project is using [GPT4FREE](https://github.com/xtekky/gpt4free)
 
 # Running the Application in a Docker Container
 
