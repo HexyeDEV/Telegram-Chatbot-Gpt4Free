@@ -33,10 +33,6 @@ Commands:
 
 /plugins list - list all plugins
 
-/jailbreak - list all jailbreaks
-
-/jailbreak [JAILBREAK NAME] - enable a jailbreak
-
 /newrole <Role Name> <Role Info> - create a new role
 
 /roles - list all the roles
