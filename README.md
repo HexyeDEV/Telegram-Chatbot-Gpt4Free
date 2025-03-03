@@ -25,7 +25,7 @@ Now run main.py with ```python3 main.py```(may change based on your python versi
 
 Enjoy!
 
-Commands:
+# Commands:
 
 /help - see a command list
 
