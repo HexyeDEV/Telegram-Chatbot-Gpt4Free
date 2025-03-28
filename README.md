@@ -1,5 +1,5 @@
 # Telegram-Chatbot-Gpt4Free
-This is a Python-based Telegram bot using the telethon library. The bot responds to messages using the evagpt4 reverse engeneered api from OpenGPT repo. This bot also supports plugins, roles, dan jailbreak and long term memory via vector database
+This is a Python-based Telegram bot using the telethon library. The bot responds to messages using the GPT4FREE repo. This bot also supports plugins, roles, dan jailbreak and long term memory via vector database
 
 # Installation
 Clone the repo
