@@ -8,6 +8,7 @@ from uuid import uuid4
 from g4f import AsyncClient
 from g4f.Provider import RetryProvider, ChatGptEs, DDG, Jmuz, Liaobots, OIVSCode, Pizzagpt, PollinationsAI
 from process_plugins import process_plugins
+from plugins import plugins as plugins_list
 
 load_dotenv()
 
@@ -29,12 +30,9 @@ GPTClient = AsyncClient(
 PLUGINS = False
 MEMORY = False
 ROLE = ""
-plugins_dict = {
-    "wolframalpha": "Wolframalpha plugin lets you perform math operations. If appropriate to use it, answer exactly with: \"[WOLFRAMALPHA <query> END]\" where query is the operation you need to solve. Examples: Input: Solve for x: 2x+3=5 Output: [WOLFRAMALPHA solve (2x+3=5) for x END] Input: A*2=B solve for B Output: [WOLFRAMALPHA solve (A*2=B) for B END]. Even if you got the input in a different language, always use english in the wolframalpha query.",
-}
-plugins_string = ""
-for plugin in plugins_dict:
-    plugins_string += f"\n{plugin}: {plugins_dict[plugin]}"
+
+for plugin in plugins_list:
+    plugins_string += f"\n{plugin.name}: {plugin.prompt}"
 
 PLUGIN_PROMPT = f"You will be given a list of plugins with description. Based on what the plugin's description says, if you think a plugin is appropriate to use, answer with the instructions to use it. If no plugin is needed, do not mention them. The available plugins are: {plugins_string}"
 
@@ -63,8 +61,8 @@ async def help(event):
 @client.on(NewMessage(pattern='/plugins list'))
 async def pls(event):
     pls = []
-    for plugin in plugins_dict:
-        pls.append(plugin)
+    for plugin in  plugins_list:
+        pls.append(plugin.name)
     await event.respond("Available plugins are:\n{}".format("\n".join(pls)))
 
 @client.on(NewMessage(pattern='/plugins toggle'))

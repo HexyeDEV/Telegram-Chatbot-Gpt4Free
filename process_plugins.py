@@ -1,9 +1,6 @@
 import wolframalpha
 from os import getenv
-
-plugins_second_question = {
-    "wolframalpha": "Explain the following wolframalpha results in a comprehensive way considering the user input was: <input> \n\nwolframalpha result: <result>. If no result is given, then try to answer the question on your own. After the answer, add the text: [Wolfram]",
-}
+from plugins import plugins as plugins_list
 
 def process_plugins(result):
     if "[WOLFRAMALPHA" in result:
@@ -20,4 +17,11 @@ def _process_wolframalpha(result):
             return [False, ""]
         else:
             w_result = next(res.results).text
-            return[True, plugins_second_question["wolframalpha"].replace("<input>", query).replace("<result>", w_result)]
+            second_question = None
+            for plugin in plugins_list:
+                if plugin.name == "wolframalpha" and plugin.has_followup:
+                    second_question = plugin.followup_prompt
+                    break
+                if not second_question:
+                     raise ValueError("No follow-up question found for wolframalpha plugin.")
+            return[True, second_question.replace("<input>", query).replace("<result>", w_result)]
