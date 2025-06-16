@@ -9,6 +9,7 @@ from g4f import AsyncClient
 from g4f.Provider import RetryProvider, ChatGptEs, DDG, Jmuz, Liaobots, OIVSCode, Pizzagpt, PollinationsAI
 from process_plugins import process_plugins
 from plugins import plugins as plugins_list
+from roles import Role
 
 load_dotenv()
 
@@ -29,7 +30,7 @@ GPTClient = AsyncClient(
 
 PLUGINS = False
 MEMORY = False
-ROLE = ""
+ROLE = None
 
 for plugin in plugins_list:
     plugins_string += f"\n{plugin.name}: {plugin.prompt}"
@@ -112,7 +113,7 @@ async def role(event):
     if role not in roles:
         await event.respond("Role not found.")
         return
-    ROLE = role
+    ROLE = Role(role, roles[role])
     await event.respond("Role enabled")
 
 @client.on(NewMessage(pattern='/memory'))
@@ -148,15 +149,9 @@ async def message(event):
         return
     msg = await event.respond("Thinking...")
     got_end_result = False
-    if ROLE:
-        with open("roles.json", "r") as f:
-            roles = f.read()
-        roles = json.loads(roles)
-        if ROLE not in roles:
-            ROLE = ""
     system_prompt = ""
     if ROLE:
-        system_prompt = roles[ROLE]
+        system_prompt = ROLE.prompt
     if MEMORY:
         res = memory.find(prompt, 1)
         if len(res) > 0 and res != []:
