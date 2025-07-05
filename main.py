@@ -31,6 +31,7 @@ GPTClient = AsyncClient(
 PLUGINS = False
 MEMORY = False
 ROLE = None
+plugins_string = ""
 
 for plugin in plugins_list:
     plugins_string += f"\n{plugin.name}: {plugin.prompt}"
